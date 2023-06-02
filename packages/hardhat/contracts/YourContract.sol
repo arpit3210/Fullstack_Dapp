@@ -11,11 +11,30 @@ contract YourContract {
 
   string public purpose = "Building Unstoppable Apps!!!";
 
+address public owner;
   constructor() payable {
+    owner=msg.sender;
     // what should we do on deploy?
   }
 
-  function setPurpose(string memory newPurpose) public payable {
+modifier onlyOwner()
+{
+  require(msg.sender== owner, "Invalid address: You are not the owner of this contract");
+  _;
+}
+
+function CheckOwnerCanCall() view public onlyOwner returns(string memory)
+{
+  string memory message= "True : Yes you are the owner of this contract";
+  return message;
+}
+
+function Addition(uint _x, uint _y) public pure returns(uint)
+{
+  return _x+_y;
+}
+
+  function setPurpose(string memory newPurpose) onlyOwner public payable {
       purpose = newPurpose;
       console.log(msg.sender,"set purpose to",purpose);
       emit SetPurpose(msg.sender, purpose);
